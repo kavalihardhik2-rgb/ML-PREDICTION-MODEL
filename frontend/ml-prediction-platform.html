@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ML Prediction Platform — AI Dashboard</title>
+  <meta name="description" content="A full-stack machine learning prediction platform featuring Iris classification, house price prediction, customer churn analysis, and sentiment analysis." />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🤖</div>
+      <div class="logo-title">ML Prediction<br>Platform</div>
+      <div class="logo-sub">Powered by scikit-learn + FastAPI</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-label">Dashboard</div>
+      <a class="nav-item active" data-page="overview" href="#" id="nav-overview">
+        <span class="nav-icon">🏠</span>
+        Overview
+      </a>
+
+      <div class="nav-label" style="margin-top:12px">ML Models</div>
+      <a class="nav-item" data-page="iris" href="#" id="nav-iris">
+        <span class="nav-icon">🌸</span>
+        Iris Classifier
+        <span class="nav-badge">RF</span>
+      </a>
+      <a class="nav-item" data-page="house" href="#" id="nav-house">
+        <span class="nav-icon">🏡</span>
+        House Price
+        <span class="nav-badge" style="background:rgba(245,158,11,0.2);color:var(--amber)">GB</span>
+      </a>
+      <a class="nav-item" data-page="churn" href="#" id="nav-churn">
+        <span class="nav-icon">👥</span>
+        Churn Predictor
+        <span class="nav-badge" style="background:rgba(239,68,68,0.2);color:var(--red)">RF</span>
+      </a>
+      <a class="nav-item" data-page="sentiment" href="#" id="nav-sentiment">
+        <span class="nav-icon">💬</span>
+        Sentiment Analysis
+        <span class="nav-badge" style="background:rgba(6,182,212,0.2);color:var(--cyan)">NB</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="status-badge checking" id="sidebar-status">
+        <span class="status-dot"></span>
+        <span id="sidebar-status-text">Connecting...</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ── -->
+  <main class="main">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title" id="topbar-title">📊 Overview Dashboard</div>
+        <div class="topbar-sub" id="topbar-sub">Select a model to start predicting</div>
+      </div>
+      <div class="topbar-right">
+        <div class="api-status-pill checking" id="api-pill">
+          <span class="status-dot" style="width:6px;height:6px;background:currentColor;border-radius:50%;flex-shrink:0"></span>
+          <span id="api-pill-text">Connecting…</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── Pages ── -->
+    <div class="page-content">
+
+      <!-- OVERVIEW PAGE -->
+      <div class="page active" id="page-overview">
+        <div class="hero-card">
+          <div class="hero-badge" style="background:rgba(124,58,237,0.15);color:var(--purple-light);border:1px solid rgba(124,58,237,0.3)">
+            🚀 Full-Stack ML Platform
+          </div>
+          <h1 class="hero-title">4 Machine Learning<br>Models, One Dashboard</h1>
+          <p class="hero-desc">
+            Explore real-time predictions powered by scikit-learn models served through a FastAPI backend.
+            Click any model card below to start making predictions.
+          </p>
+          <div class="hero-meta">
+            <span class="meta-chip">⚡ FastAPI Backend</span>
+            <span class="meta-chip">🧠 scikit-learn Models</span>
+            <span class="meta-chip">📊 4 ML Algorithms</span>
+            <span class="meta-chip">🎨 Real-time Predictions</span>
+          </div>
+        </div>
+
+        <div class="overview-grid">
+          <div class="overview-model-card iris" onclick="navigate('iris')">
+            <span class="overview-arrow">↗</span>
+            <span class="model-card-icon">🌸</span>
+            <div class="model-card-name">Iris Classifier</div>
+            <div class="model-card-desc">Classify iris flowers into Setosa, Versicolor, or Virginica using petal and sepal measurements.</div>
+            <div class="model-card-tags">
+              <span class="tag">Random Forest</span>
+              <span class="tag">Classification</span>
+              <span class="tag green">~97% Accuracy</span>
+            </div>
+          </div>
+
+          <div class="overview-model-card house" onclick="navigate('house')">
+            <span class="overview-arrow">↗</span>
+            <span class="model-card-icon">🏡</span>
+            <div class="model-card-name">House Price Predictor</div>
+            <div class="model-card-desc">Predict California housing prices based on location, income, and dwelling characteristics.</div>
+            <div class="model-card-tags">
+              <span class="tag amber">Gradient Boosting</span>
+              <span class="tag amber">Regression</span>
+              <span class="tag green">~85% R²</span>
+            </div>
+          </div>
+
+          <div class="overview-model-card churn" onclick="navigate('churn')">
+            <span class="overview-arrow">↗</span>
+            <span class="model-card-icon">👥</span>
+            <div class="model-card-name">Churn Predictor</div>
+            <div class="model-card-desc">Identify customers at risk of churning using behavioral and billing data patterns.</div>
+            <div class="model-card-tags">
+              <span class="tag red">Random Forest</span>
+              <span class="tag red">Binary Class.</span>
+              <span class="tag green">~88% Accuracy</span>
+            </div>
+          </div>
+
+          <div class="overview-model-card sentiment" onclick="navigate('sentiment')">
+            <span class="overview-arrow">↗</span>
+            <span class="model-card-icon">💬</span>
+            <div class="model-card-name">Sentiment Analyzer</div>
+            <div class="model-card-desc">Analyze text sentiment as Positive, Negative, or Neutral using NLP classification.</div>
+            <div class="model-card-tags">
+              <span class="tag cyan">Naive Bayes</span>
+              <span class="tag cyan">TF-IDF · NLP</span>
+              <span class="tag green">~90% Accuracy</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <div class="card-title">⚙️ System Architecture</div>
+          <div class="grid-3">
+            <div class="stat-card">
+              <div class="stat-num" style="background:var(--grad-main);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent">4</div>
+              <div class="stat-name">ML Models</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" style="color:var(--amber)">FastAPI</div>
+              <div class="stat-name">Backend Framework</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" style="color:var(--cyan)">REST</div>
+              <div class="stat-name">API Architecture</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IRIS PAGE -->
+      <div class="page" id="page-iris">
+        <div class="hero-card">
+          <div class="hero-badge" style="background:rgba(124,58,237,0.15);color:var(--purple-light);border:1px solid rgba(124,58,237,0.3)">
+            🌸 Random Forest · Classification
+          </div>
+          <h1 class="hero-title iris">Iris Flower Classifier</h1>
+          <p class="hero-desc">Enter the measurements of an iris flower to identify its species with confidence probabilities.</p>
+          <div class="hero-meta">
+            <span class="meta-chip">🌱 3 Species Classes</span>
+            <span class="meta-chip">🌿 4 Input Features</span>
+            <span class="meta-chip">🌲 100 Decision Trees</span>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="glass-card" id="iris-form-card">
+            <div class="card-title">📐 Flower Measurements</div>
+
+            <div class="form-group">
+              <label class="form-label">
+                Sepal Length (cm)
+                <span class="form-hint" id="sl-val">5.1 cm</span>
+              </label>
+              <div class="range-container">
+                <input type="range" id="sepal_length" min="4.0" max="8.0" step="0.1" value="5.1" oninput="updateRangeVal('sl-val', this.value, 'cm')">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                Sepal Width (cm)
+                <span class="form-hint" id="sw-val">3.5 cm</span>
+              </label>
+              <div class="range-container">
+                <input type="range" id="sepal_width" min="2.0" max="5.0" step="0.1" value="3.5" oninput="updateRangeVal('sw-val', this.value, 'cm')">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                Petal Length (cm)
+                <span class="form-hint" id="pl-val">1.4 cm</span>
+              </label>
+              <div class="range-container">
+                <input type="range" id="petal_length" min="1.0" max="7.0" step="0.1" value="1.4" oninput="updateRangeVal('pl-val', this.value, 'cm')">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">
+                Petal Width (cm)
+                <span class="form-hint" id="pw-val">0.2 cm</span>
+              </label>
+              <div class="range-container">
+                <input type="range" id="petal_width" min="0.1" max="2.5" step="0.1" value="0.2" oninput="updateRangeVal('pw-val', this.value, 'cm')">
+              </div>
+            </div>
+
+            <button class="btn btn-iris" id="iris-btn" onclick="predictIris()">
+              🔮 Predict Species
+            </button>
+            <div class="error-banner" id="iris-error">⚠️ <span id="iris-error-msg"></span></div>
+
+            <div class="divider"></div>
+            <div class="card-title" style="margin-bottom:10px">🧪 Quick Examples</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-sm" style="background:rgba(124,58,237,0.15);color:var(--purple-light);border:1px solid rgba(124,58,237,0.3)" onclick="setIrisPreset(5.1,3.5,1.4,0.2)">Setosa</button>
+              <button class="btn btn-sm" style="background:rgba(6,182,212,0.12);color:var(--cyan);border:1px solid rgba(6,182,212,0.25)" onclick="setIrisPreset(6.0,2.9,4.5,1.5)">Versicolor</button>
+              <button class="btn btn-sm" style="background:rgba(34,197,94,0.12);color:var(--green);border:1px solid rgba(34,197,94,0.25)" onclick="setIrisPreset(6.7,3.1,5.6,2.4)">Virginica</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="result-panel" id="iris-result">
+              <div class="result-hero">
+                <span class="result-emoji" id="iris-emoji">🌸</span>
+                <div class="result-label">Predicted Species</div>
+                <div class="result-value" id="iris-species">—</div>
+                <div class="result-sub" id="iris-confidence-text">Confidence: —</div>
+              </div>
+
+              <div class="glass-card" style="margin-top:0">
+                <div class="card-title">📊 Species Probabilities</div>
+                <div id="iris-prob-bars"></div>
+              </div>
+            </div>
+
+            <div class="glass-card" id="iris-chart-card" style="display:none;margin-top:20px">
+              <div class="card-title">📈 Probability Distribution</div>
+              <canvas id="iris-chart" height="200"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOUSE PAGE -->
+      <div class="page" id="page-house">
+        <div class="hero-card">
+          <div class="hero-badge" style="background:rgba(245,158,11,0.15);color:var(--amber);border:1px solid rgba(245,158,11,0.3)">
+            🏡 Gradient Boosting · Regression
+          </div>
+          <h1 class="hero-title house">House Price Predictor</h1>
+          <p class="hero-desc">Predict California housing prices using location, income, and building characteristics.</p>
+          <div class="hero-meta">
+            <span class="meta-chip">🌴 California Housing Dataset</span>
+            <span class="meta-chip">📍 8 Input Features</span>
+            <span class="meta-chip">🌲 200 Boosting Trees</span>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="glass-card">
+            <div class="card-title">🏗️ Property Details</div>
+
+            <div class="form-group">
+              <label class="form-label">Median Income <span class="form-hint" id="inc-val">3.5 × $10k</span></label>
+              <input type="range" id="med_inc" min="0.5" max="15" step="0.1" value="3.5" oninput="updateRangeVal('inc-val', this.value, '× $10k')">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">House Age (years) <span class="form-hint" id="age-val">20 yrs</span></label>
+              <input type="range" id="house_age" min="1" max="52" step="1" value="20" oninput="updateRangeVal('age-val', this.value, 'yrs')">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Avg Rooms per House <span class="form-hint" id="rooms-val">5.2</span></label>
+              <input type="range" id="ave_rooms" min="1" max="15" step="0.1" value="5.2" oninput="updateRangeVal('rooms-val', this.value, '')">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Avg Bedrooms <span class="form-hint" id="beds-val">1.0</span></label>
+              <input type="range" id="ave_bedrms" min="1" max="8" step="0.1" value="1.0" oninput="updateRangeVal('beds-val', this.value, '')">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Population <span class="form-hint" id="pop-val">1200</span></label>
+              <input type="range" id="population" min="100" max="10000" step="50" value="1200" oninput="updateRangeVal('pop-val', this.value, '')">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Avg Occupancy <span class="form-hint" id="occ-val">3.0</span></label>
+              <input type="range" id="ave_occup" min="1" max="10" step="0.1" value="3.0" oninput="updateRangeVal('occ-val', this.value, '')">
+            </div>
+
+            <div class="grid-2" style="gap:12px">
+              <div class="form-group">
+                <label class="form-label">Latitude <span class="form-hint" id="lat-val">37.5</span></label>
+                <input type="range" id="latitude" min="32.5" max="42.0" step="0.1" value="37.5" oninput="updateRangeVal('lat-val', this.value, '')">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Longitude <span class="form-hint" id="lng-val">-122.0</span></label>
+                <input type="range" id="longitude" min="-124.5" max="-114.0" step="0.1" value="-122.0" oninput="updateRangeVal('lng-val', this.value, '')">
+              </div>
+            </div>
+
+            <button class="btn btn-house" id="house-btn" onclick="predictHouse()">
+              💰 Predict Price
+            </button>
+            <div class="error-banner" id="house-error">⚠️ <span id="house-error-msg"></span></div>
+          </div>
+
+          <div>
+            <div class="result-panel" id="house-result">
+              <div class="result-hero">
+                <span class="result-emoji">🏡</span>
+                <div class="result-label">Estimated Market Value</div>
+                <div class="result-value" style="font-size:30px;background:var(--grad-house);-webkit-background-clip:text;background-clip:text" id="house-price">—</div>
+                <div class="result-sub">Based on California Housing model</div>
+              </div>
+              <div class="glass-card" style="margin-top:0">
+                <div class="card-title">🔑 Feature Importance</div>
+                <div id="house-importance"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHURN PAGE -->
+      <div class="page" id="page-churn">
+        <div class="hero-card">
+          <div class="hero-badge" style="background:rgba(239,68,68,0.12);color:var(--red);border:1px solid rgba(239,68,68,0.3)">
+            👥 Random Forest · Binary Classification
+          </div>
+          <h1 class="hero-title churn">Customer Churn Predictor</h1>
+          <p class="hero-desc">Predict the probability of a customer churning based on their profile and service usage data.</p>
+          <div class="hero-meta">
+            <span class="meta-chip">📡 Telecom Dataset</span>
+            <span class="meta-chip">🔢 8 Features</span>
+            <span class="meta-chip">🌲 150 Trees</span>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="glass-card">
+            <div class="card-title">👤 Customer Profile</div>
+
+            <div class="form-group">
+              <label class="form-label">Tenure (months) <span class="form-hint" id="tenure-val">12 months</span></label>
+              <input type="range" id="tenure" min="0" max="72" step="1" value="12" oninput="updateRangeVal('tenure-val', this.value, 'months')">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Monthly Charges <span class="form-hint" id="mc-val">$65.50</span></label>
+              <input type="range" id="monthly_charges" min="20" max="120" step="0.5" value="65.5" oninput="updateMonthlyCharge(this.value)">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Total Charges <span class="form-hint" id="tc-val">$800.00</span></label>
+              <input type="range" id="total_charges" min="0" max="8000" step="10" value="800" oninput="updateTotalCharge(this.value)">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Number of Products <span class="form-hint" id="prod-val">2</span></label>
+              <input type="range" id="num_products" min="1" max="4" step="1" value="2" oninput="updateRangeVal('prod-val', this.value, '')">
+            </div>
+
+            <div class="grid-2" style="gap:12px">
+              <div class="form-group">
+                <label class="form-label">Contract Type</label>
+                <select class="form-select" id="contract_type">
+                  <option value="0">📅 Month-to-Month</option>
+                  <option value="1">📆 One Year</option>
+                  <option value="2">🗓️ Two Year</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Payment Method</label>
+                <select class="form-select" id="payment_method">
+                  <option value="0">⚡ Electronic Check</option>
+                  <option value="1">📮 Mailed Check</option>
+                  <option value="2">🏦 Bank Transfer</option>
+                  <option value="3">💳 Credit Card</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid-2" style="gap:12px">
+              <div class="form-group">
+                <label class="form-label">Internet Service</label>
+                <select class="form-select" id="has_internet">
+                  <option value="1">✅ Yes</option>
+                  <option value="0">❌ No</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tech Support</label>
+                <select class="form-select" id="tech_support">
+                  <option value="0">❌ No</option>
+                  <option value="1">✅ Yes</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="btn btn-churn" id="churn-btn" onclick="predictChurn()">
+              🔍 Analyze Churn Risk
+            </button>
+            <div class="error-banner" id="churn-error">⚠️ <span id="churn-error-msg"></span></div>
+          </div>
+
+          <div>
+            <div class="result-panel" id="churn-result">
+              <div class="result-hero" id="churn-result-hero">
+                <span class="result-emoji" id="churn-emoji">👥</span>
+                <div class="result-label">Churn Prediction</div>
+                <div class="result-value" style="font-size:28px" id="churn-prediction">—</div>
+                <div id="churn-risk-badge" style="margin-top:10px"></div>
+              </div>
+
+              <div class="glass-card" style="margin-top:0">
+                <div class="card-title">📊 Probability Breakdown</div>
+                <div id="churn-prob-bars"></div>
+              </div>
+
+              <div class="glass-card" style="margin-top:20px">
+                <div class="card-title">🔑 Feature Importance</div>
+                <div id="churn-importance"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SENTIMENT PAGE -->
+      <div class="page" id="page-sentiment">
+        <div class="hero-card">
+          <div class="hero-badge" style="background:rgba(6,182,212,0.12);color:var(--cyan);border:1px solid rgba(6,182,212,0.3)">
+            💬 Naive Bayes · NLP Classification
+          </div>
+          <h1 class="hero-title sentiment">Sentiment Analyzer</h1>
+          <p class="hero-desc">Analyze the emotional tone of any text — product reviews, movie critiques, social media posts, or any free-form writing.</p>
+          <div class="hero-meta">
+            <span class="meta-chip">🧠 TF-IDF Features</span>
+            <span class="meta-chip">📝 3 Sentiment Classes</span>
+            <span class="meta-chip">🔤 Bigram Analysis</span>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="glass-card">
+            <div class="card-title">✍️ Enter Text</div>
+            <div class="form-group">
+              <label class="form-label">
+                Your text
+                <span class="form-hint" id="char-counter">0 / 2000 chars</span>
+              </label>
+              <textarea
+                class="form-textarea"
+                id="sentiment_text"
+                placeholder="Type or paste any text here — a review, comment, sentence, paragraph…"
+                maxlength="2000"
+                oninput="updateCharCounter(this)"
+                style="min-height:140px"
+              ></textarea>
+            </div>
+
+            <button class="btn btn-sentiment" id="sentiment-btn" onclick="predictSentiment()">
+              🧠 Analyze Sentiment
+            </button>
+            <div class="error-banner" id="sentiment-error">⚠️ <span id="sentiment-error-msg"></span></div>
+
+            <div class="divider"></div>
+            <div class="card-title" style="margin-bottom:10px">💡 Try These Examples</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <button class="btn btn-sm" style="background:rgba(34,197,94,0.08);color:var(--green);border:1px solid rgba(34,197,94,0.25);justify-content:flex-start;text-align:left;white-space:normal;height:auto;padding:10px 14px;line-height:1.4" onclick="setSentimentPreset('This movie was absolutely fantastic! The performances were outstanding and I loved every minute of it.')">
+                😊 "This movie was absolutely fantastic!…"
+              </button>
+              <button class="btn btn-sm" style="background:rgba(239,68,68,0.08);color:var(--red);border:1px solid rgba(239,68,68,0.25);justify-content:flex-start;text-align:left;white-space:normal;height:auto;padding:10px 14px;line-height:1.4" onclick="setSentimentPreset('Terrible experience. The product broke after two days and customer service was completely unhelpful.')">
+                😞 "Terrible experience. The product broke…"
+              </button>
+              <button class="btn btn-sm" style="background:rgba(245,158,11,0.08);color:var(--amber);border:1px solid rgba(245,158,11,0.25);justify-content:flex-start;text-align:left;white-space:normal;height:auto;padding:10px 14px;line-height:1.4" onclick="setSentimentPreset('The movie was okay, not great but not terrible either. It had some good moments.')">
+                😐 "The movie was okay, not great but not terrible…"
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <div class="result-panel" id="sentiment-result">
+              <div class="result-hero" id="sentiment-result-hero">
+                <span class="result-emoji" id="sentiment-emoji">💬</span>
+                <div class="result-label">Detected Sentiment</div>
+                <div class="result-value" style="font-size:32px;text-transform:capitalize" id="sentiment-label">—</div>
+                <div class="result-sub" id="sentiment-conf-text">Confidence: —</div>
+              </div>
+
+              <div class="glass-card" style="margin-top:0">
+                <div class="card-title">📊 Sentiment Scores</div>
+                <div id="sentiment-prob-bars"></div>
+              </div>
+
+              <div class="glass-card" style="margin-top:20px">
+                <div class="card-title">📝 Text Statistics</div>
+                <div class="stats-grid" id="sentiment-stats"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </main>
+
+  <script src="js/app.js"></script>
+  <script src="js/iris.js"></script>
+  <script src="js/house.js"></script>
+  <script src="js/churn.js"></script>
+  <script src="js/sentiment.js"></script>
+</body>
+</html>
